@@ -1,0 +1,7 @@
+package repositories
+
+import "github.com/scys12/cake-store/internal/types"
+
+type ICakeRepo interface {
+	InsertCake(*types.Cake) (int64, error)
+}

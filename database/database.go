@@ -6,19 +6,20 @@ import (
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/scys12/cake-store/config"
 )
 
 const (
-	dbCredentialsFormat = "user=%s password=%s dbname=%s host=%s port=%d"
+	dbCredentialsFormat = "%v:%v@tcp(%v:%v)/%v"
 )
 
-func GetDatabaseConnection(cfg config) *sql.DB {
+func GetDatabaseConnection(cfg config.Config) *sql.DB {
 	address := fmt.Sprintf(dbCredentialsFormat,
-		cfg.User,
-		cfg.Password,
+		cfg.DBUser,
+		cfg.DBPassword,
+		cfg.DBHost,
+		cfg.DBPort,
 		cfg.DBName,
-		cfg.Host,
-		cfg.Port,
 	)
 
 	db, err := sql.Open("mysql", address)

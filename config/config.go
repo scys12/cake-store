@@ -13,7 +13,27 @@ type Config struct {
 	DBPort     int    `mapstructure:"db_port"`
 }
 
-func InitConfig() (config Config, err error) {
+type ServerConfig struct {
+	WriteTimeout int `mapstructure:"write_timeout"`
+	ReadTimeout  int `mapstructure:"read_timeout"`
+	Port         int `mapstructure:"port"`
+}
+
+func InitDBConfig() (config Config, err error) {
+	viper.SetConfigName("config")
+	viper.SetConfigType("env")
+	viper.AddConfigPath(".")
+	err = viper.ReadInConfig()
+	if err != nil {
+		return
+	}
+	if err = viper.Unmarshal(&config); err != nil {
+		return
+	}
+	return
+}
+
+func InitServerConfig() (config ServerConfig, err error) {
 	viper.SetConfigName("config")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(".")
