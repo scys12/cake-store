@@ -3,8 +3,10 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"time"
 
+	"github.com/gorilla/mux"
 	"github.com/scys12/cake-store/internal/server"
 	"github.com/scys12/cake-store/internal/service"
 	"github.com/scys12/cake-store/internal/types"
@@ -23,6 +25,7 @@ func NewCakeHandler(service service.ICakeService) CakeHandler {
 
 func (c *CakeHandler) InsertCake(w http.ResponseWriter, r *http.Request) {
 	var insertReq types.InsertCakeRequest
+
 	err := json.NewDecoder(r.Body).Decode(&insertReq)
 	if err != nil {
 		log.WithFields(log.Fields{
@@ -41,7 +44,38 @@ func (c *CakeHandler) InsertCake(w http.ResponseWriter, r *http.Request) {
 			"function": "InsertCake",
 		}).Errorln("[CakeHandler] Failed to insert cake")
 
+		server.RenderError(w, http.StatusInternalServerError, err, time.Now())
+		return
+	}
+
+	server.RenderResponse(w, http.StatusCreated, resp, time.Now())
+}
+
+func (c *CakeHandler) UpdateCake(w http.ResponseWriter, r *http.Request) {
+	var updateReq types.InsertCakeRequest
+
+	vars := mux.Vars(r)
+	id, _ := strconv.ParseInt(vars["id"], 10, 64)
+
+	err := json.NewDecoder(r.Body).Decode(&updateReq)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"error":    err.Error(),
+			"function": "UpdateCake",
+		}).Errorln("[CakeHandler] Unable to decode request body")
+
 		server.RenderError(w, http.StatusBadRequest, err, time.Now())
+		return
+	}
+
+	resp, err := c.cakeService.UpdateCake(id, updateReq)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"error":    err.Error(),
+			"function": "UpdateCake",
+		}).Errorln("[CakeHandler] Failed to update cake")
+
+		server.RenderError(w, http.StatusInternalServerError, err, time.Now())
 		return
 	}
 	server.RenderResponse(w, http.StatusCreated, resp, time.Now())

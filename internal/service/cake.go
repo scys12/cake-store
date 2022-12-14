@@ -36,10 +36,39 @@ func (c *CakeService) InsertCake(data types.InsertCakeRequest) (*types.CakeRespo
 
 	resp := types.CakeResponse{
 		ID:          id,
+		Title:       cake.Title,
+		Description: cake.Description,
+		Rating:      cake.Rating,
+		Image:       cake.Image,
+	}
+	return &resp, nil
+}
+
+func (c *CakeService) UpdateCake(id int64, data types.InsertCakeRequest) (*types.CakeResponse, error) {
+	cake := &types.Cake{
+		ID:          id,
 		Title:       data.Title,
 		Description: data.Description,
 		Rating:      data.Rating,
 		Image:       data.Image,
+	}
+
+	err := c.cakeRepo.UpdateCake(cake)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"function": "UpdateCake",
+			"error":    err.Error(),
+		}).Errorln("[CakeService] Failed to update database")
+
+		return nil, err
+	}
+
+	resp := types.CakeResponse{
+		ID:          cake.ID,
+		Title:       cake.Title,
+		Description: cake.Description,
+		Rating:      cake.Rating,
+		Image:       cake.Image,
 	}
 	return &resp, nil
 }
