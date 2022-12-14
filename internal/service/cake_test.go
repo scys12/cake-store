@@ -100,3 +100,34 @@ func Test_UpdateCake(t *testing.T) {
 		})
 	}
 }
+
+func Test_DeleteCake(t *testing.T) {
+	defID := int64(1)
+	testcases := []struct {
+		name string
+		err  error
+	}{
+		{
+			name: "Delete cake successfully",
+			err:  nil,
+		},
+		{
+			name: "Failed to delete cake",
+			err:  errors.New("error"),
+		},
+	}
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			controller := gomock.NewController(t)
+			defer controller.Finish()
+
+			repo := mocks.NewMockICakeRepo(controller)
+			repo.EXPECT().DeleteCake(gomock.Any()).Return(tc.err).AnyTimes()
+
+			svc := service.NewCakeService(repo)
+			err := svc.DeleteCake(defID)
+			assert.Equal(t, tc.err, err)
+
+		})
+	}
+}

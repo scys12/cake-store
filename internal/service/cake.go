@@ -72,3 +72,17 @@ func (c *CakeService) UpdateCake(id int64, data types.InsertCakeRequest) (*types
 	}
 	return &resp, nil
 }
+
+func (c *CakeService) DeleteCake(id int64) error {
+	err := c.cakeRepo.DeleteCake(id)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"function": "UpdateCake",
+			"error":    err.Error(),
+		}).Errorln("[CakeService] Failed to delete cake")
+
+		return err
+	}
+
+	return nil
+}

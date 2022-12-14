@@ -78,5 +78,26 @@ func (c *CakeHandler) UpdateCake(w http.ResponseWriter, r *http.Request) {
 		server.RenderError(w, http.StatusInternalServerError, err, time.Now())
 		return
 	}
-	server.RenderResponse(w, http.StatusCreated, resp, time.Now())
+	server.RenderResponse(w, http.StatusOK, resp, time.Now())
+}
+
+func (c *CakeHandler) DeleteCake(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	id, _ := strconv.ParseInt(vars["id"], 10, 64)
+
+	err := c.cakeService.DeleteCake(id)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"error":    err.Error(),
+			"function": "DeleteCake",
+		}).Errorln("[CakeHandler] Failed to delete cake")
+
+		server.RenderError(w, http.StatusInternalServerError, err, time.Now())
+		return
+	}
+	resp := types.CakeResponse{
+		ID: id,
+	}
+	server.RenderResponse(w, http.StatusOK, resp, time.Now())
 }

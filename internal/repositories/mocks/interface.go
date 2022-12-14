@@ -34,6 +34,20 @@ func (m *MockICakeRepo) EXPECT() *MockICakeRepoMockRecorder {
 	return m.recorder
 }
 
+// DeleteCake mocks base method.
+func (m *MockICakeRepo) DeleteCake(arg0 int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteCake", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteCake indicates an expected call of DeleteCake.
+func (mr *MockICakeRepoMockRecorder) DeleteCake(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteCake", reflect.TypeOf((*MockICakeRepo)(nil).DeleteCake), arg0)
+}
+
 // InsertCake mocks base method.
 func (m *MockICakeRepo) InsertCake(arg0 *types.Cake) (int64, error) {
 	m.ctrl.T.Helper()

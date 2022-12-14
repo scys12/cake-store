@@ -74,7 +74,7 @@ func Test_UpdateCake(t *testing.T) {
 			name:        "Update cake successfully",
 			id:          1,
 			err:         nil,
-			resultCode:  http.StatusCreated,
+			resultCode:  http.StatusOK,
 			requestBody: `{"title": "Lemon", "description": "cheesecake", "rating": 12}`,
 		},
 		{
@@ -108,6 +108,46 @@ func Test_UpdateCake(t *testing.T) {
 
 			h := handler.NewCakeHandler(service)
 			h.UpdateCake(resp, req)
+			assert.Equal(t, tc.resultCode, resp.Code)
+		})
+	}
+}
+
+func Test_DeleteCake(t *testing.T) {
+	testcases := []struct {
+		name       string
+		err        error
+		resultCode int
+		id         int64
+	}{
+		{
+			name:       "Delete cake successfully",
+			id:         1,
+			err:        nil,
+			resultCode: http.StatusOK,
+		},
+		{
+			name:       "Failed to delete cake",
+			id:         1,
+			err:        errors.New("error"),
+			resultCode: http.StatusInternalServerError,
+		},
+	}
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			req, err := http.NewRequest(http.MethodDelete, fmt.Sprint("/cakes/", tc.id), strings.NewReader(""))
+			assert.NoError(t, err)
+			req.Header.Set("Content-Type", "application/json")
+			resp := httptest.NewRecorder()
+
+			controller := gomock.NewController(t)
+			defer controller.Finish()
+
+			service := mocks.NewMockICakeService(controller)
+			service.EXPECT().DeleteCake(gomock.Any()).Return(tc.err).AnyTimes()
+
+			h := handler.NewCakeHandler(service)
+			h.DeleteCake(resp, req)
 			assert.Equal(t, tc.resultCode, resp.Code)
 		})
 	}

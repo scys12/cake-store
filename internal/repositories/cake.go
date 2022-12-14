@@ -99,3 +99,39 @@ func (c *CakeRepo) UpdateCake(cake *types.Cake) error {
 
 	return nil
 }
+
+func (c *CakeRepo) DeleteCake(id int64) error {
+	res, err := c.db.Exec(`
+	DELETE 
+	FROM cake
+	WHERE
+		id = ?
+	`,
+		id,
+	)
+
+	if err != nil {
+		log.WithFields(log.Fields{
+			"function": "DeleteCake",
+			"error":    err.Error(),
+		}).Errorln("[CakeRepo] Problem querying to database")
+
+		return err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		log.WithFields(log.Fields{
+			"function": "DeleteCake",
+			"error":    err.Error(),
+		}).Errorln("[CakeRepo] Failed to get rows affected")
+
+		return err
+	}
+
+	if rowsAffected < 1 {
+		return errors.New("No rows affected")
+	}
+
+	return nil
+}
