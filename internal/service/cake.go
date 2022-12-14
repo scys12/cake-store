@@ -86,3 +86,26 @@ func (c *CakeService) DeleteCake(id int64) error {
 
 	return nil
 }
+
+func (c *CakeService) GetCakeDetail(id int64) (*types.CakeResponse, error) {
+	cake, err := c.cakeRepo.GetCakeDetail(id)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"function": "GetCakeDetail",
+			"error":    err.Error(),
+		}).Errorln("[CakeService] Failed to get cake detail")
+
+		return nil, err
+	}
+
+	resp := types.CakeResponse{
+		ID:          cake.ID,
+		Title:       cake.Title,
+		Description: cake.Description,
+		Rating:      cake.Rating,
+		Image:       cake.Image,
+		CreatedAt:   cake.CreatedAt,
+		UpdatedAt:   cake.UpdatedAt,
+	}
+	return &resp, nil
+}

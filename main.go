@@ -35,6 +35,7 @@ func main() {
 	router.HandleFunc("/cakes", cakeHandler.InsertCake).Methods(http.MethodPost).Name("insertCake")
 	router.HandleFunc("/cakes/{id}", cakeHandler.UpdateCake).Methods(http.MethodPatch).Name("updateCake")
 	router.HandleFunc("/cakes/{id}", cakeHandler.DeleteCake).Methods(http.MethodDelete).Name("deleteCake")
+	router.HandleFunc("/cakes/{id}", cakeHandler.GetCakeDetail).Methods(http.MethodGet).Name("getCakeDetail")
 
 	serverConfig := server.Config{
 		WriteTimeout: time.Duration(servConf.WriteTimeout) * time.Second,

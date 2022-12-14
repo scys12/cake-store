@@ -82,7 +82,6 @@ func (c *CakeHandler) UpdateCake(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *CakeHandler) DeleteCake(w http.ResponseWriter, r *http.Request) {
-
 	vars := mux.Vars(r)
 	id, _ := strconv.ParseInt(vars["id"], 10, 64)
 
@@ -98,6 +97,23 @@ func (c *CakeHandler) DeleteCake(w http.ResponseWriter, r *http.Request) {
 	}
 	resp := types.CakeResponse{
 		ID: id,
+	}
+	server.RenderResponse(w, http.StatusOK, resp, time.Now())
+}
+
+func (c *CakeHandler) GetCakeDetail(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, _ := strconv.ParseInt(vars["id"], 10, 64)
+
+	resp, err := c.cakeService.GetCakeDetail(id)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"error":    err.Error(),
+			"function": "GetCakeDetail",
+		}).Errorln("[CakeHandler] Failed to get cake detail")
+
+		server.RenderError(w, http.StatusInternalServerError, err, time.Now())
+		return
 	}
 	server.RenderResponse(w, http.StatusOK, resp, time.Now())
 }

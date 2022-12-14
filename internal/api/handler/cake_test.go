@@ -152,3 +152,49 @@ func Test_DeleteCake(t *testing.T) {
 		})
 	}
 }
+
+func Test_GetCakeDetail(t *testing.T) {
+	testcases := []struct {
+		name       string
+		err        error
+		resultCode int
+		id         int64
+		cake       *types.CakeResponse
+	}{
+		{
+			name:       "Get cake successfully",
+			id:         1,
+			err:        nil,
+			resultCode: http.StatusOK,
+			cake: &types.CakeResponse{
+				ID:    1,
+				Title: "Lemon",
+			},
+		},
+		{
+			name:       "Failed to get cake",
+			id:         1,
+			err:        errors.New("error"),
+			resultCode: http.StatusInternalServerError,
+			cake:       nil,
+		},
+	}
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			req, err := http.NewRequest(http.MethodGet, fmt.Sprint("/cakes/", tc.id), strings.NewReader(""))
+			assert.NoError(t, err)
+			req.Header.Set("Content-Type", "application/json")
+			resp := httptest.NewRecorder()
+
+			controller := gomock.NewController(t)
+			defer controller.Finish()
+
+			service := mocks.NewMockICakeService(controller)
+			service.EXPECT().GetCakeDetail(gomock.Any()).Return(tc.cake, tc.err).AnyTimes()
+
+			h := handler.NewCakeHandler(service)
+			h.GetCakeDetail(resp, req)
+			assert.Equal(t, tc.resultCode, resp.Code)
+		})
+	}
+}

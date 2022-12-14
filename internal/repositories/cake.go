@@ -135,3 +135,40 @@ func (c *CakeRepo) DeleteCake(id int64) error {
 
 	return nil
 }
+
+func (c *CakeRepo) GetCakeDetail(id int64) (*types.Cake, error) {
+	cake := new(types.Cake)
+
+	if err := c.db.QueryRow(`
+	SELECT 
+		id, 
+		title, 
+		description, 
+		rating, 
+		image, 
+		created_at, 
+		updated_at
+	FROM cake
+	WHERE
+		id = ?
+	`,
+		id,
+	).Scan(
+		&cake.ID,
+		&cake.Title,
+		&cake.Description,
+		&cake.Rating,
+		&cake.Image,
+		&cake.CreatedAt,
+		&cake.UpdatedAt,
+	); err != nil {
+		log.WithFields(log.Fields{
+			"function": "GetCakeDetail",
+			"error":    err.Error(),
+		}).Errorln("[CakeRepo] Problem querying to database")
+
+		return nil, err
+	}
+
+	return cake, nil
+}
