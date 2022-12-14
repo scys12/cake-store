@@ -16,13 +16,13 @@ func Test_InsertCake(t *testing.T) {
 	testcases := []struct {
 		name string
 		err  error
-		req  types.InsertCakeRequest
+		req  types.CakeRequest
 		resp *types.CakeResponse
 	}{
 		{
 			name: "Insert cake successfully",
 			err:  nil,
-			req: types.InsertCakeRequest{
+			req: types.CakeRequest{
 				Title: "Lemon",
 			},
 			resp: &types.CakeResponse{
@@ -33,7 +33,7 @@ func Test_InsertCake(t *testing.T) {
 		{
 			name: "Failed to insert cake",
 			err:  errors.New("error"),
-			req: types.InsertCakeRequest{
+			req: types.CakeRequest{
 				Title: "Lemon",
 			},
 			resp: nil,
@@ -61,13 +61,13 @@ func Test_UpdateCake(t *testing.T) {
 	testcases := []struct {
 		name string
 		err  error
-		req  types.InsertCakeRequest
+		req  types.CakeRequest
 		resp *types.CakeResponse
 	}{
 		{
 			name: "Update cake successfully",
 			err:  nil,
-			req: types.InsertCakeRequest{
+			req: types.CakeRequest{
 				Title: "Lemon",
 			},
 			resp: &types.CakeResponse{
@@ -78,7 +78,7 @@ func Test_UpdateCake(t *testing.T) {
 		{
 			name: "Failed to update cake",
 			err:  errors.New("error"),
-			req: types.InsertCakeRequest{
+			req: types.CakeRequest{
 				Title: "Lemon",
 			},
 			resp: nil,

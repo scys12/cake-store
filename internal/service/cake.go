@@ -16,7 +16,7 @@ func NewCakeService(repo repositories.ICakeRepo) ICakeService {
 	}
 }
 
-func (c *CakeService) InsertCake(data types.InsertCakeRequest) (*types.CakeResponse, error) {
+func (c *CakeService) InsertCake(data types.CakeRequest) (*types.CakeResponse, error) {
 	cake := &types.Cake{
 		Title:       data.Title,
 		Description: data.Description,
@@ -44,7 +44,7 @@ func (c *CakeService) InsertCake(data types.InsertCakeRequest) (*types.CakeRespo
 	return &resp, nil
 }
 
-func (c *CakeService) UpdateCake(id int64, data types.InsertCakeRequest) (*types.CakeResponse, error) {
+func (c *CakeService) UpdateCake(id int64, data types.CakeRequest) (*types.CakeResponse, error) {
 	cake := &types.Cake{
 		ID:          id,
 		Title:       data.Title,

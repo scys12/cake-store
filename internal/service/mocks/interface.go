@@ -64,7 +64,7 @@ func (mr *MockICakeServiceMockRecorder) GetCakeDetail(arg0 interface{}) *gomock.
 }
 
 // InsertCake mocks base method.
-func (m *MockICakeService) InsertCake(arg0 types.InsertCakeRequest) (*types.CakeResponse, error) {
+func (m *MockICakeService) InsertCake(arg0 types.CakeRequest) (*types.CakeResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "InsertCake", arg0)
 	ret0, _ := ret[0].(*types.CakeResponse)
@@ -79,7 +79,7 @@ func (mr *MockICakeServiceMockRecorder) InsertCake(arg0 interface{}) *gomock.Cal
 }
 
 // UpdateCake mocks base method.
-func (m *MockICakeService) UpdateCake(arg0 int64, arg1 types.InsertCakeRequest) (*types.CakeResponse, error) {
+func (m *MockICakeService) UpdateCake(arg0 int64, arg1 types.CakeRequest) (*types.CakeResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateCake", arg0, arg1)
 	ret0, _ := ret[0].(*types.CakeResponse)

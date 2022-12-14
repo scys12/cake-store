@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
 	"github.com/scys12/cake-store/internal/server"
 	"github.com/scys12/cake-store/internal/service"
@@ -24,7 +25,7 @@ func NewCakeHandler(service service.ICakeService) CakeHandler {
 }
 
 func (c *CakeHandler) InsertCake(w http.ResponseWriter, r *http.Request) {
-	var insertReq types.InsertCakeRequest
+	var insertReq types.CakeRequest
 
 	err := json.NewDecoder(r.Body).Decode(&insertReq)
 	if err != nil {
@@ -33,6 +34,13 @@ func (c *CakeHandler) InsertCake(w http.ResponseWriter, r *http.Request) {
 			"function": "InsertCake",
 		}).Info("[CakeHandler] Unable to decode request body")
 
+		server.RenderError(w, http.StatusBadRequest, err, time.Now())
+		return
+	}
+
+	validate := validator.New()
+	err = validate.Struct(insertReq)
+	if err != nil {
 		server.RenderError(w, http.StatusBadRequest, err, time.Now())
 		return
 	}
@@ -52,7 +60,7 @@ func (c *CakeHandler) InsertCake(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *CakeHandler) UpdateCake(w http.ResponseWriter, r *http.Request) {
-	var updateReq types.InsertCakeRequest
+	var updateReq types.CakeRequest
 
 	vars := mux.Vars(r)
 	id, _ := strconv.ParseInt(vars["id"], 10, 64)
@@ -64,6 +72,13 @@ func (c *CakeHandler) UpdateCake(w http.ResponseWriter, r *http.Request) {
 			"function": "UpdateCake",
 		}).Errorln("[CakeHandler] Unable to decode request body")
 
+		server.RenderError(w, http.StatusBadRequest, err, time.Now())
+		return
+	}
+
+	validate := validator.New()
+	err = validate.Struct(updateReq)
+	if err != nil {
 		server.RenderError(w, http.StatusBadRequest, err, time.Now())
 		return
 	}

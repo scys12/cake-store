@@ -1,10 +1,10 @@
 package types
 
-type InsertCakeRequest struct {
-	Title       string  `json:"title"`
-	Description string  `json:"description"`
-	Rating      float32 `json:"rating"`
-	Image       string  `json:"image"`
+type CakeRequest struct {
+	Title       string  `json:"title" validate:"required"`
+	Description string  `json:"description" validate:"required"`
+	Rating      float32 `json:"rating" validate:"required,number"`
+	Image       string  `json:"image" validate:"required,url"`
 }
 
 type CakeResponse struct {

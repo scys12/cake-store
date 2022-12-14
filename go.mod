@@ -6,6 +6,7 @@ require (
 	github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6 // indirect
 	github.com/coreos/etcd v3.3.10+incompatible // indirect
 	github.com/coreos/go-etcd v2.0.0+incompatible // indirect
+	github.com/go-playground/validator/v10 v10.11.1 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
