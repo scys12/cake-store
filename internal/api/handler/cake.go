@@ -31,7 +31,7 @@ func (c *CakeHandler) InsertCake(w http.ResponseWriter, r *http.Request) {
 		log.WithFields(log.Fields{
 			"error":    err.Error(),
 			"function": "InsertCake",
-		}).Errorln("[CakeHandler] Unable to decode request body")
+		}).Info("[CakeHandler] Unable to decode request body")
 
 		server.RenderError(w, http.StatusBadRequest, err, time.Now())
 		return

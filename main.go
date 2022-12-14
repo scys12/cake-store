@@ -32,8 +32,8 @@ func main() {
 	cakeHandler := handler.NewCakeHandler(cakeService)
 
 	router := mux.NewRouter()
-	router.HandleFunc("/cakes", cakeHandler.InsertCake).Methods(http.MethodPost)
-	router.HandleFunc("/cakes/{id}", cakeHandler.UpdateCake).Methods(http.MethodPatch)
+	router.HandleFunc("/cakes", cakeHandler.InsertCake).Methods(http.MethodPost).Name("insertCake")
+	router.HandleFunc("/cakes/{id}", cakeHandler.UpdateCake).Methods(http.MethodPatch).Name("updateCake")
 
 	serverConfig := server.Config{
 		WriteTimeout: time.Duration(servConf.WriteTimeout) * time.Second,
