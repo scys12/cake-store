@@ -9,7 +9,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -19,7 +18,7 @@ type Config struct {
 	Port         int
 }
 
-func Serve(cfg Config, router *mux.Router) {
+func Serve(cfg Config, router http.Handler) {
 	srv := &http.Server{
 		Handler:      router,
 		Addr:         fmt.Sprint(":", cfg.Port),

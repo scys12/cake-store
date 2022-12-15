@@ -10,6 +10,7 @@ require (
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
+	github.com/prometheus/client_golang v1.14.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/spf13/viper v1.14.0 // indirect
 	github.com/stretchr/testify v1.8.1 // indirect
