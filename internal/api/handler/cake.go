@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
@@ -34,14 +33,20 @@ func (c *CakeHandler) InsertCake(w http.ResponseWriter, r *http.Request) {
 			"function": "InsertCake",
 		}).Info("[CakeHandler] Unable to decode request body")
 
-		server.RenderError(w, http.StatusBadRequest, types.ErrBadRequest, time.Now())
+		server.RenderError(w, http.StatusBadRequest, types.ErrBadRequest)
 		return
 	}
 
 	validate := validator.New()
 	err = validate.Struct(insertReq)
-	if err != nil {
-		server.RenderError(w, http.StatusBadRequest, err, time.Now())
+	errs := ValidateRequest(validate, err)
+	if errs != nil {
+		log.WithFields(log.Fields{
+			"error":    errs[0],
+			"function": "InsertCake",
+		}).Info("[CakeHandler] Request validation failed")
+
+		server.RenderError(w, http.StatusBadRequest, errs[0])
 		return
 	}
 
@@ -52,11 +57,11 @@ func (c *CakeHandler) InsertCake(w http.ResponseWriter, r *http.Request) {
 			"function": "InsertCake",
 		}).Errorln("[CakeHandler] Failed to insert cake")
 
-		server.RenderError(w, http.StatusInternalServerError, err, time.Now())
+		server.RenderError(w, http.StatusInternalServerError, err)
 		return
 	}
 
-	server.RenderResponse(w, http.StatusCreated, resp, time.Now())
+	server.RenderResponse(w, http.StatusCreated, resp)
 }
 
 func (c *CakeHandler) UpdateCake(w http.ResponseWriter, r *http.Request) {
@@ -72,14 +77,20 @@ func (c *CakeHandler) UpdateCake(w http.ResponseWriter, r *http.Request) {
 			"function": "UpdateCake",
 		}).Errorln("[CakeHandler] Unable to decode request body")
 
-		server.RenderError(w, http.StatusBadRequest, types.ErrBadRequest, time.Now())
+		server.RenderError(w, http.StatusBadRequest, types.ErrBadRequest)
 		return
 	}
 
 	validate := validator.New()
 	err = validate.Struct(updateReq)
-	if err != nil {
-		server.RenderError(w, http.StatusBadRequest, err, time.Now())
+	errs := ValidateRequest(validate, err)
+	if errs != nil {
+		log.WithFields(log.Fields{
+			"error":    errs[0],
+			"function": "InsertCake",
+		}).Info("[CakeHandler] Request validation failed")
+
+		server.RenderError(w, http.StatusBadRequest, errs[0])
 		return
 	}
 
@@ -90,10 +101,10 @@ func (c *CakeHandler) UpdateCake(w http.ResponseWriter, r *http.Request) {
 			"function": "UpdateCake",
 		}).Errorln("[CakeHandler] Failed to update cake")
 
-		server.RenderError(w, http.StatusInternalServerError, err, time.Now())
+		server.RenderError(w, http.StatusInternalServerError, err)
 		return
 	}
-	server.RenderResponse(w, http.StatusOK, resp, time.Now())
+	server.RenderResponse(w, http.StatusOK, resp)
 }
 
 func (c *CakeHandler) DeleteCake(w http.ResponseWriter, r *http.Request) {
@@ -107,13 +118,13 @@ func (c *CakeHandler) DeleteCake(w http.ResponseWriter, r *http.Request) {
 			"function": "DeleteCake",
 		}).Errorln("[CakeHandler] Failed to delete cake")
 
-		server.RenderError(w, http.StatusInternalServerError, err, time.Now())
+		server.RenderError(w, http.StatusInternalServerError, err)
 		return
 	}
 	resp := types.CakeResponse{
 		ID: id,
 	}
-	server.RenderResponse(w, http.StatusOK, resp, time.Now())
+	server.RenderResponse(w, http.StatusOK, resp)
 }
 
 func (c *CakeHandler) GetCakeDetail(w http.ResponseWriter, r *http.Request) {
@@ -127,8 +138,8 @@ func (c *CakeHandler) GetCakeDetail(w http.ResponseWriter, r *http.Request) {
 			"function": "GetCakeDetail",
 		}).Errorln("[CakeHandler] Failed to get cake detail")
 
-		server.RenderError(w, http.StatusInternalServerError, err, time.Now())
+		server.RenderError(w, http.StatusInternalServerError, err)
 		return
 	}
-	server.RenderResponse(w, http.StatusOK, resp, time.Now())
+	server.RenderResponse(w, http.StatusOK, resp)
 }

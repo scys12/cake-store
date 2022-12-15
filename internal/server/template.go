@@ -3,25 +3,15 @@ package server
 import (
 	"encoding/json"
 	"net/http"
-	"time"
 )
 
-type headerData struct {
-	ProcessTime  int64  `json:"process_time_ms"`
-	ErrorMessage string `json:"error_message,omitempty"`
-}
-
 type response struct {
-	Header       headerData  `json:"header"`
-	ErrorMessage string      `json:"error_message,omitempty"`
+	ErrorMessage interface{} `json:"error_message,omitempty"`
 	Data         interface{} `json:"data"`
 }
 
-func RenderResponse(w http.ResponseWriter, statusCode int, data interface{}, startTime time.Time) {
+func RenderResponse(w http.ResponseWriter, statusCode int, data interface{}) {
 	res := response{
-		Header: headerData{
-			ProcessTime: time.Since(startTime).Milliseconds(),
-		},
 		Data: data,
 	}
 
@@ -31,12 +21,9 @@ func RenderResponse(w http.ResponseWriter, statusCode int, data interface{}, sta
 	w.Write(d)
 }
 
-func RenderError(w http.ResponseWriter, statusCode int, err error, startTime time.Time) {
+func RenderError(w http.ResponseWriter, statusCode int, err error) {
 	res := response{
-		Header: headerData{
-			ProcessTime:  time.Since(startTime).Milliseconds(),
-			ErrorMessage: err.Error(),
-		},
+		ErrorMessage: err.Error(),
 	}
 
 	w.Header().Set("Content-Type", "application/json")
