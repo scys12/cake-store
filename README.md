@@ -26,6 +26,15 @@ docker-compose down -v
 
 This project use `grafana` and `prometheus` for system monitoring and alerting. Read official documentation [here](https://prometheus.io/) about prometheus and [here](https://grafana.com) for grafana. There are 3 metrics that are measured, namely latency, total request and response status. Read more [here](https://github.com/scys12/cake-store/tree/master/pkg/monitoring).
 
+## Unit Test
+
+To check how muc coverage, run:
+
+```
+make create_cover_test
+```
+
+Explore Makefile file to know the command to visualize the coverage in HTML.
 
 ## API
 ### List of Cake
@@ -47,7 +56,7 @@ This project use `grafana` and `prometheus` for system monitoring and alerting. 
           "image": "https://img.taste.com.au/ynYrqkOs/w720-h480-cfill-q80/taste/2016/11/sunny-lemon-cheesecake-102220-1.jpeg",
           "created_at": "2020-02-01 10:56:31",
           "updated_at": "2020-02-13 09:30:23"
-        }
+        }, ...
       ],
       "total_data": 6,
       "total_data_per_page":5
@@ -102,7 +111,7 @@ This project use `grafana` and `prometheus` for system monitoring and alerting. 
       {
         "title": "Lemon cheesecake",
         "description": "A cheesecake made of lemon",
-        "rating": 7,
+        "rating": 8,
         "image": "https://img.taste.com.au/ynYrqkOs/w720-h480-cfill-q80/taste/2016/11/sunny-lemon-cheesecake-102220-1.jpeg"
       }
 #### Response
@@ -111,7 +120,7 @@ This project use `grafana` and `prometheus` for system monitoring and alerting. 
           "id": 1,
           "title": "Lemon cheesecake",
           "description": "A cheesecake made of lemon",
-          "rating": 7,
+          "rating": 8,
           "image": "https://img.taste.com.au/ynYrqkOs/w720-h480-cfill-q80/taste/2016/11/sunny-lemon-cheesecake-102220-1.jpeg"
         }
       }
