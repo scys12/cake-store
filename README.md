@@ -39,10 +39,14 @@ Explore Makefile file to know the command to visualize the coverage in HTML.
 ## API
 ### List of Cake
 
-#### Request
-`GET /cakes/`
+There are two query parameters that we can use, `sort` and `page`. We can fill `sort` with the name of the column that we want to sort such as `sort=title`. For `page`, we can use to access list of cakes that lies in that page such as `page=2`. But if there aren't any query parameters that written, then the output will be cakes that have sorted by rating and title.
 
-    curl -i -H 'Accept: application/json' http://localhost:8000/cakes/
+#### Request
+`GET /cakes`
+
+    curl -i -H 'Accept: application/json' http://localhost:8000/cakes
+    
+    curl -i -H 'Accept: application/json' http://localhost:8000/cakes?sort=title&page=2
 
 #### Response
 
