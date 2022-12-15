@@ -34,7 +34,7 @@ func (c *CakeHandler) InsertCake(w http.ResponseWriter, r *http.Request) {
 			"function": "InsertCake",
 		}).Info("[CakeHandler] Unable to decode request body")
 
-		server.RenderError(w, http.StatusBadRequest, err, time.Now())
+		server.RenderError(w, http.StatusBadRequest, types.ErrBadRequest, time.Now())
 		return
 	}
 
@@ -72,7 +72,7 @@ func (c *CakeHandler) UpdateCake(w http.ResponseWriter, r *http.Request) {
 			"function": "UpdateCake",
 		}).Errorln("[CakeHandler] Unable to decode request body")
 
-		server.RenderError(w, http.StatusBadRequest, err, time.Now())
+		server.RenderError(w, http.StatusBadRequest, types.ErrBadRequest, time.Now())
 		return
 	}
 

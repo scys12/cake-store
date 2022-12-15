@@ -26,19 +26,19 @@ func Test_InsertCake(t *testing.T) {
 			name:        "Insert cake successfully",
 			err:         nil,
 			resultCode:  http.StatusCreated,
-			requestBody: `{"title": "Lemon", "description": "cheesecake", "rating": 12}`,
+			requestBody: `{"title": "Lemon", "description": "cheesecake", "rating": 12, "image": "https://img.taste.com.au/ynYrqkOs/w720-h480-cfill-q80/taste/2016/11/sunny-lemon-cheesecake-102220-1.jpeg"}`,
 		},
 		{
 			name:        "Failed Bad Request Body",
 			err:         errors.New("error"),
 			resultCode:  http.StatusBadRequest,
-			requestBody: `{"title": "Lemon", "description": "cheesecake", "rating": }`,
+			requestBody: `{"title": "Lemon", "description": "cheesecake", "image": "https://img.taste.com.au/ynYrqkOs/w720-h480-cfill-q80/taste/2016/11/sunny-lemon-cheesecake-102220-1.jpeg","rating": }`,
 		},
 		{
 			name:        "Failed to insert cake",
 			err:         errors.New("error"),
 			resultCode:  http.StatusInternalServerError,
-			requestBody: `{"title": "Lemon", "description": "cheesecake", "rating": 12}`,
+			requestBody: `{"title": "Lemon", "description": "cheesecake", "rating": 12, "image": "https://img.taste.com.au/ynYrqkOs/w720-h480-cfill-q80/taste/2016/11/sunny-lemon-cheesecake-102220-1.jpeg"}`,
 		},
 	}
 	for _, tc := range testcases {
@@ -75,21 +75,21 @@ func Test_UpdateCake(t *testing.T) {
 			id:          1,
 			err:         nil,
 			resultCode:  http.StatusOK,
-			requestBody: `{"title": "Lemon", "description": "cheesecake", "rating": 12}`,
+			requestBody: `{"title": "Lemon", "description": "cheesecake", "rating": 12, "image": "https://img.taste.com.au/ynYrqkOs/w720-h480-cfill-q80/taste/2016/11/sunny-lemon-cheesecake-102220-1.jpeg"}`,
 		},
 		{
 			name:        "Failed Bad Request Body",
 			id:          1,
 			err:         errors.New("error"),
 			resultCode:  http.StatusBadRequest,
-			requestBody: `{"title": "Lemon", "description": "cheesecake", "rating": }`,
+			requestBody: `{"title": "Lemon", "description": "cheesecake", "image": "https://img.taste.com.au/ynYrqkOs/w720-h480-cfill-q80/taste/2016/11/sunny-lemon-cheesecake-102220-1.jpeg", "rating": }`,
 		},
 		{
 			name:        "Failed to update cake",
 			id:          1,
 			err:         errors.New("error"),
 			resultCode:  http.StatusInternalServerError,
-			requestBody: `{"title": "Lemon", "description": "cheesecake", "rating": 12}`,
+			requestBody: `{"title": "Lemon", "description": "cheesecake", "rating": 12, "image": "https://img.taste.com.au/ynYrqkOs/w720-h480-cfill-q80/taste/2016/11/sunny-lemon-cheesecake-102220-1.jpeg"}`,
 		},
 	}
 	for _, tc := range testcases {

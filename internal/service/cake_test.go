@@ -1,7 +1,6 @@
 package service_test
 
 import (
-	"errors"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -32,7 +31,7 @@ func Test_InsertCake(t *testing.T) {
 		},
 		{
 			name: "Failed to insert cake",
-			err:  errors.New("error"),
+			err:  types.ErrFailedInsertCake,
 			req: types.CakeRequest{
 				Title: "Lemon",
 			},
@@ -77,7 +76,7 @@ func Test_UpdateCake(t *testing.T) {
 		},
 		{
 			name: "Failed to update cake",
-			err:  errors.New("error"),
+			err:  types.ErrFailedUpdateCake,
 			req: types.CakeRequest{
 				Title: "Lemon",
 			},
@@ -113,7 +112,7 @@ func Test_DeleteCake(t *testing.T) {
 		},
 		{
 			name: "Failed to delete cake",
-			err:  errors.New("error"),
+			err:  types.ErrFailedDeleteCake,
 		},
 	}
 	for _, tc := range testcases {
@@ -154,7 +153,7 @@ func Test_GetCakeDetail(t *testing.T) {
 		},
 		{
 			name: "Failed to get cake",
-			err:  errors.New("error"),
+			err:  types.ErrGetCakeDetail,
 			resp: nil,
 			cake: nil,
 		},

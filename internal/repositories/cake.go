@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"database/sql"
-	"errors"
 
 	"github.com/scys12/cake-store/internal/types"
 	log "github.com/sirupsen/logrus"
@@ -41,8 +40,8 @@ func (c *CakeRepo) InsertCake(cake *types.Cake) (int64, error) {
 		log.WithFields(log.Fields{
 			"function": "InsertCake",
 			"error":    err.Error(),
-		}).Errorln("[CakeRepo] Problem querying to database")
-		return 0, err
+		}).Errorln("[CakeRepo] Failed to insert cake")
+		return 0, types.ErrFailedInsertCake
 	}
 
 	id, err = res.LastInsertId()
@@ -52,7 +51,7 @@ func (c *CakeRepo) InsertCake(cake *types.Cake) (int64, error) {
 			"error":    err.Error(),
 		}).Errorln("[CakeRepo] Failed to get ID")
 
-		return 0, err
+		return 0, types.ErrFailedGetLastIDDB
 	}
 
 	return id, nil
@@ -79,8 +78,8 @@ func (c *CakeRepo) UpdateCake(cake *types.Cake) error {
 		log.WithFields(log.Fields{
 			"function": "UpdateCake",
 			"error":    err.Error(),
-		}).Errorln("[CakeRepo] Problem querying to database")
-		return err
+		}).Errorln("[CakeRepo] Failed to update cake")
+		return types.ErrFailedUpdateCake
 	}
 
 	rowsAffected, err := res.RowsAffected()
@@ -90,11 +89,11 @@ func (c *CakeRepo) UpdateCake(cake *types.Cake) error {
 			"error":    err.Error(),
 		}).Errorln("[CakeRepo] Failed to get rows affected")
 
-		return err
+		return types.ErrFailedRowsAffected
 	}
 
 	if rowsAffected < 1 {
-		return errors.New("No rows affected")
+		return types.ErrNoRowsAffected
 	}
 
 	return nil
@@ -114,9 +113,9 @@ func (c *CakeRepo) DeleteCake(id int64) error {
 		log.WithFields(log.Fields{
 			"function": "DeleteCake",
 			"error":    err.Error(),
-		}).Errorln("[CakeRepo] Problem querying to database")
+		}).Errorln("[CakeRepo] Failed to delete cake")
 
-		return err
+		return types.ErrFailedDeleteCake
 	}
 
 	rowsAffected, err := res.RowsAffected()
@@ -126,11 +125,11 @@ func (c *CakeRepo) DeleteCake(id int64) error {
 			"error":    err.Error(),
 		}).Errorln("[CakeRepo] Failed to get rows affected")
 
-		return err
+		return types.ErrFailedRowsAffected
 	}
 
 	if rowsAffected < 1 {
-		return errors.New("No rows affected")
+		return types.ErrNoRowsAffected
 	}
 
 	return nil
@@ -165,9 +164,9 @@ func (c *CakeRepo) GetCakeDetail(id int64) (*types.Cake, error) {
 		log.WithFields(log.Fields{
 			"function": "GetCakeDetail",
 			"error":    err.Error(),
-		}).Errorln("[CakeRepo] Problem querying to database")
+		}).Errorln("[CakeRepo] Failed to get cake detail")
 
-		return nil, err
+		return nil, types.ErrGetCakeDetail
 	}
 
 	return cake, nil
