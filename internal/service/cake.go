@@ -98,14 +98,46 @@ func (c *CakeService) GetCakeDetail(id int64) (*types.CakeResponse, error) {
 		return nil, err
 	}
 
-	resp := types.CakeResponse{
-		ID:          cake.ID,
-		Title:       cake.Title,
-		Description: cake.Description,
-		Rating:      cake.Rating,
-		Image:       cake.Image,
-		CreatedAt:   cake.CreatedAt,
-		UpdatedAt:   cake.UpdatedAt,
-	}
+	resp := types.CakeResponse(*cake)
 	return &resp, nil
+}
+
+func (c *CakeService) GetListOfCake(sortBy string, pageNum int64) (*types.CakesResponse, error) {
+	if pageNum < 1 {
+		pageNum = 1
+	}
+
+	cakes, err := c.cakeRepo.GetListOfCake(sortBy, pageNum)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"function": "GetCakeDetail",
+			"error":    err.Error(),
+		}).Errorln("[CakeService] Failed to get cake detail")
+
+		return nil, err
+	}
+
+	totalData, err := c.cakeRepo.CountAllCakes()
+	if err != nil {
+		log.WithFields(log.Fields{
+			"function": "GetCakeDetail",
+			"error":    err.Error(),
+		}).Errorln("[CakeService] Failed to count cakes")
+
+		return nil, err
+	}
+
+	var cr []types.CakeResponse
+	for _, c := range cakes {
+		r := types.CakeResponse(c)
+		cr = append(cr, r)
+	}
+
+	resp := &types.CakesResponse{
+		Cakes:            cr,
+		TotalData:        totalData,
+		TotalDataPerPage: 5,
+	}
+
+	return resp, nil
 }

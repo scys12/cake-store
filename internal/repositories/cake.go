@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/scys12/cake-store/internal/types"
 	log "github.com/sirupsen/logrus"
@@ -170,4 +171,74 @@ func (c *CakeRepo) GetCakeDetail(id int64) (*types.Cake, error) {
 	}
 
 	return cake, nil
+}
+
+func (c *CakeRepo) GetListOfCake(sortBy string, pageNum int64) ([]types.Cake, error) {
+	pageLimit := 5
+	var cakes []types.Cake
+
+	dbQuery := `
+	SELECT 
+		id, 
+		title, 
+		description, 
+		rating, 
+		image, 
+		created_at, 
+		updated_at
+	FROM cake
+	`
+
+	if len(sortBy) > 0 {
+		dbQuery = fmt.Sprint(dbQuery, "ORDER BY ", sortBy, " ASC ")
+	} else {
+		dbQuery = fmt.Sprint(dbQuery, "ORDER BY rating ASC, title ASC ")
+	}
+	dbQuery = fmt.Sprint(dbQuery, "LIMIT ", pageLimit, " OFFSET ", pageLimit*(int(pageNum)-1))
+
+	rows, err := c.db.Query(dbQuery)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"function": "GetListOfCake",
+			"error":    err.Error(),
+		}).Errorln("[CakeRepo] Failed to get list of cake")
+
+		return nil, types.ErrGetCakeList
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		cake := types.Cake{}
+		err = rows.Scan(&cake.ID, &cake.Title, &cake.Description, &cake.Rating, &cake.Image, &cake.CreatedAt, &cake.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+		cakes = append(cakes, cake)
+	}
+
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+
+	return cakes, nil
+}
+
+func (c *CakeRepo) CountAllCakes() (int64, error) {
+	var count int64
+
+	if err := c.db.QueryRow(`
+	SELECT 
+		COUNT(id)
+	FROM cake
+	`).Scan(&count); err != nil {
+		log.WithFields(log.Fields{
+			"function": "CountAllCakes",
+			"error":    err.Error(),
+		}).Errorln("[CakeRepo] Failed to count cakes")
+
+		return 0, types.ErrCountCakes
+	}
+
+	return count, nil
 }

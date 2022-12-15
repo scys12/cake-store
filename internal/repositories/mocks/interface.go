@@ -34,6 +34,21 @@ func (m *MockICakeRepo) EXPECT() *MockICakeRepoMockRecorder {
 	return m.recorder
 }
 
+// CountAllCakes mocks base method.
+func (m *MockICakeRepo) CountAllCakes() (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CountAllCakes")
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CountAllCakes indicates an expected call of CountAllCakes.
+func (mr *MockICakeRepoMockRecorder) CountAllCakes() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountAllCakes", reflect.TypeOf((*MockICakeRepo)(nil).CountAllCakes))
+}
+
 // DeleteCake mocks base method.
 func (m *MockICakeRepo) DeleteCake(arg0 int64) error {
 	m.ctrl.T.Helper()
@@ -61,6 +76,21 @@ func (m *MockICakeRepo) GetCakeDetail(arg0 int64) (*types.Cake, error) {
 func (mr *MockICakeRepoMockRecorder) GetCakeDetail(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCakeDetail", reflect.TypeOf((*MockICakeRepo)(nil).GetCakeDetail), arg0)
+}
+
+// GetListOfCake mocks base method.
+func (m *MockICakeRepo) GetListOfCake(arg0 string, arg1 int64) ([]types.Cake, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetListOfCake", arg0, arg1)
+	ret0, _ := ret[0].([]types.Cake)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetListOfCake indicates an expected call of GetListOfCake.
+func (mr *MockICakeRepoMockRecorder) GetListOfCake(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetListOfCake", reflect.TypeOf((*MockICakeRepo)(nil).GetListOfCake), arg0, arg1)
 }
 
 // InsertCake mocks base method.

@@ -63,6 +63,21 @@ func (mr *MockICakeServiceMockRecorder) GetCakeDetail(arg0 interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCakeDetail", reflect.TypeOf((*MockICakeService)(nil).GetCakeDetail), arg0)
 }
 
+// GetListOfCake mocks base method.
+func (m *MockICakeService) GetListOfCake(arg0 string, arg1 int64) (*types.CakesResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetListOfCake", arg0, arg1)
+	ret0, _ := ret[0].(*types.CakesResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetListOfCake indicates an expected call of GetListOfCake.
+func (mr *MockICakeServiceMockRecorder) GetListOfCake(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetListOfCake", reflect.TypeOf((*MockICakeService)(nil).GetListOfCake), arg0, arg1)
+}
+
 // InsertCake mocks base method.
 func (m *MockICakeService) InsertCake(arg0 types.CakeRequest) (*types.CakeResponse, error) {
 	m.ctrl.T.Helper()

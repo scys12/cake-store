@@ -26,3 +26,10 @@ func ValidateRequest(validate *validator.Validate, err error) (errs []error) {
 	}
 	return errs
 }
+
+func GetValidatedSortBy(sortStr string) string {
+	if sortStr != "title" && sortStr != "rating" && sortStr != "created_at" {
+		return ""
+	}
+	return sortStr
+}

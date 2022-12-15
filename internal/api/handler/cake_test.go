@@ -210,3 +210,50 @@ func Test_GetCakeDetail(t *testing.T) {
 		})
 	}
 }
+
+func Test_GetListOfCake(t *testing.T) {
+	testcases := []struct {
+		name       string
+		err        error
+		resultCode int
+		queryParam string
+		cake       *types.CakesResponse
+	}{
+		{
+			name:       "Get cakes successfully",
+			err:        nil,
+			queryParam: "?sort=title",
+			resultCode: http.StatusOK,
+			cake: &types.CakesResponse{
+				Cakes:            []types.CakeResponse{},
+				TotalData:        1,
+				TotalDataPerPage: 1,
+			},
+		},
+		{
+			name:       "Failed to get cakes",
+			queryParam: "",
+			err:        errors.New("error"),
+			resultCode: http.StatusInternalServerError,
+			cake:       nil,
+		},
+	}
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			req, err := http.NewRequest(http.MethodGet, fmt.Sprint("/cakes", tc.queryParam), strings.NewReader(""))
+			assert.NoError(t, err)
+			req.Header.Set("Content-Type", "application/json")
+			resp := httptest.NewRecorder()
+
+			controller := gomock.NewController(t)
+			defer controller.Finish()
+
+			service := mocks.NewMockICakeService(controller)
+			service.EXPECT().GetListOfCake(gomock.Any(), gomock.Any()).Return(tc.cake, tc.err).AnyTimes()
+
+			h := handler.NewCakeHandler(service)
+			h.GetListOfCake(resp, req)
+			assert.Equal(t, tc.resultCode, resp.Code)
+		})
+	}
+}

@@ -143,3 +143,23 @@ func (c *CakeHandler) GetCakeDetail(w http.ResponseWriter, r *http.Request) {
 	}
 	server.RenderResponse(w, http.StatusOK, resp)
 }
+
+func (c *CakeHandler) GetListOfCake(w http.ResponseWriter, r *http.Request) {
+	sortBy := r.URL.Query().Get("sort")
+	sortBy = GetValidatedSortBy(sortBy)
+
+	page := r.URL.Query().Get("page")
+	pageNum, _ := strconv.ParseInt(page, 10, 64)
+
+	resp, err := c.cakeService.GetListOfCake(sortBy, pageNum)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"error":    err.Error(),
+			"function": "GetListOfCake",
+		}).Errorln("[CakeHandler] Failed to get list of cake")
+
+		server.RenderError(w, http.StatusInternalServerError, err)
+		return
+	}
+	server.RenderResponse(w, http.StatusOK, resp)
+}

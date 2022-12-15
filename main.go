@@ -42,6 +42,8 @@ func main() {
 	router.HandleFunc("/cakes/{id}", cakeHandler.UpdateCake).Methods(http.MethodPatch).Name("updateCake")
 	router.HandleFunc("/cakes/{id}", cakeHandler.DeleteCake).Methods(http.MethodDelete).Name("deleteCake")
 	router.HandleFunc("/cakes/{id}", cakeHandler.GetCakeDetail).Methods(http.MethodGet).Name("getCakeDetail")
+	router.HandleFunc("/cakes", cakeHandler.GetListOfCake).Methods(http.MethodGet).Name("getCakeList")
+
 	router.Handle("/prometheus", promhttp.Handler())
 	wrappedMux := monitoring.Middleware(router)
 

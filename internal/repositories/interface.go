@@ -7,4 +7,6 @@ type ICakeRepo interface {
 	UpdateCake(*types.Cake) error
 	DeleteCake(int64) error
 	GetCakeDetail(int64) (*types.Cake, error)
+	GetListOfCake(string, int64) ([]types.Cake, error)
+	CountAllCakes() (int64, error)
 }

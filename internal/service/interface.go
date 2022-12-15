@@ -7,4 +7,5 @@ type ICakeService interface {
 	UpdateCake(int64, types.CakeRequest) (*types.CakeResponse, error)
 	DeleteCake(int64) error
 	GetCakeDetail(int64) (*types.CakeResponse, error)
+	GetListOfCake(string, int64) (*types.CakesResponse, error)
 }

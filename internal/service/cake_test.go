@@ -174,3 +174,78 @@ func Test_GetCakeDetail(t *testing.T) {
 		})
 	}
 }
+
+func Test_GetListOfCake(t *testing.T) {
+	testcases := []struct {
+		name      string
+		errGet    error
+		errCount  error
+		totalData int64
+		resp      *types.CakesResponse
+		cakes     []types.Cake
+	}{
+		{
+			name:      "Get cakes successfully",
+			errGet:    nil,
+			errCount:  nil,
+			totalData: 1,
+			resp: &types.CakesResponse{
+				Cakes: []types.CakeResponse{
+					{
+						ID:    1,
+						Title: "Cheesecake",
+					},
+				},
+				TotalData:        1,
+				TotalDataPerPage: 5,
+			},
+			cakes: []types.Cake{
+				{
+					ID:    1,
+					Title: "Cheesecake",
+				},
+			},
+		},
+		{
+			name:      "Failed to get cakes",
+			errGet:    types.ErrGetCakeList,
+			errCount:  nil,
+			resp:      nil,
+			cakes:     nil,
+			totalData: 0,
+		},
+		{
+			name:     "Failed to count cakes",
+			errGet:   nil,
+			errCount: types.ErrCountCakes,
+			resp:     nil,
+			cakes: []types.Cake{
+				{
+					ID:    1,
+					Title: "Cheesecake",
+				},
+			},
+			totalData: 0,
+		},
+	}
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			controller := gomock.NewController(t)
+			defer controller.Finish()
+
+			repo := mocks.NewMockICakeRepo(controller)
+			repo.EXPECT().GetListOfCake(gomock.Any(), gomock.Any()).Return(tc.cakes, tc.errGet).AnyTimes()
+			repo.EXPECT().CountAllCakes().Return(tc.totalData, tc.errCount).AnyTimes()
+
+			svc := service.NewCakeService(repo)
+			resp, err := svc.GetListOfCake("", 0)
+			if tc.errGet != nil {
+				assert.Equal(t, tc.errGet, err)
+			} else {
+				assert.Equal(t, tc.errCount, err)
+			}
+			assert.Equal(t, tc.resp, resp)
+
+		})
+	}
+}

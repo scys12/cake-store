@@ -17,6 +17,12 @@ type CakeResponse struct {
 	UpdatedAt   string  `json:"updated_at,omitempty"`
 }
 
+type CakesResponse struct {
+	Cakes            []CakeResponse `json:"cakes"`
+	TotalData        int64          `json:"total_data"`
+	TotalDataPerPage int64          `json:"total_data_per_page"`
+}
+
 type Cake struct {
 	ID          int64   `json:"id"`
 	Title       string  `json:"title"`
